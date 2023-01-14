@@ -1,36 +1,38 @@
-// import {auth, firebaseConfig} from "../Lib/auth";
-// import {signInWithEmailAndPassword} from "../Lib/auth";
+// eslint-disable-next-line max-len
+import {
+  signInWithEmailAndPassword,
+}
+  from 'firebase/auth';
 
-// import { createUserWithEmailAndPassword, signInWithEmailAndPassword,signOut, getAuth } from "firebase/auth";
-import { auth } from "../Lib/auth";
+import { onSnapshot, collection, doc } from 'firebase/firestore';
 
-import Card from "./Card";
+import {
+  auth, 
+} from '../Lib/firebase-init';
 
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword,signOut, getAuth } from "firebase/auth";
+import Card from './Card2';
 
 export default class Login {
-  //Velden
+  // Velden
   // email : string;
   // password : string;
   // auth : any;
 
   place : HTMLElement;
 
-  //Constructor
+  // Constructor
   constructor(
-    place : HTMLElement
+    place : HTMLElement,
 
-    ) {
-    this.place = place
+  ) {
+    this.place = place;
     this.render();
   }
 
-  //Functions
-    //Render (make the thing)
+  // Functions
+  // Render (make the thing)
   render() {
-
     const loginContainer = document.createElement('div');
-
 
     loginContainer.innerHTML = `
     <h1>Welkom</h1>
@@ -45,34 +47,40 @@ export default class Login {
 
     this.place.append(loginContainer);
 
-    loginContainer.addEventListener('submit', (e: Event) => {
+    loginContainer.addEventListener('submit', (e : Event) => {
       e.preventDefault();
       const formdata = new FormData(e.target);
-      let email = formdata.get('email');
-      let password = formdata.get('password');
+      const email = formdata.get('email');
+      const password = formdata.get('password');
 
-      console.log(email);
       signInWithEmailAndPassword(auth, email, password).then((cred) => {
-        //Whatever you wants to happen after user has logged in
-  
-          // Console log users information
-            console.log("user logged in:", cred.user);
-            console.log()
-            const card = new Card(document.querySelector("#root")!);
+        // Whatever you wants to happen after user has logged in
 
-  
-          // Empty form
-            // loginForm.reset();
-  
-          // Show next page and hide current
-            // document.querySelector('NEXTPAGE').classList.remove('hidden');
-            // document.querySelector('CURRENTPAGE').classList.add('hidden');
+        // Console log users information
+        console.log('user logged in:', cred.user);
+        const user_id = cred.user.uid;
+        sessionStorage.setItem("user_id", user_id);
+        sessionStorage.setItem("user_id", user_id);
+
+        // const card = new Card(document.querySelector('#root')!);
+        // card.render();
+
+        // const user_id = cred.user.uid;
+
+        // Empty form
+        // loginForm.reset();
+
+        // Show next page and hide current
+        // document.querySelector('NEXTPAGE').classList.remove('hidden');
+        // document.querySelector('CURRENTPAGE').classList.add('hidden');
+
       })
-      .catch((err) => {
-        console.log(err.message);
-      });;
-    })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    });
     return loginContainer;
   }
 
+  
 }

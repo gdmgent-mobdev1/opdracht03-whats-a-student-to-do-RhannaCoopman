@@ -1,28 +1,26 @@
-import {auth, db} from "../Lib/auth";
-
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { setDoc, doc } from "firebase/firestore";
-
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { setDoc, doc } from 'firebase/firestore';
+import { auth, db } from '../Lib/auth';
 
 export default class Register {
-  //Velden
+  // Velden
   place : HTMLElement;
 
-  //Constructor
+  // Constructor
   constructor(
-    place : HTMLElement
+    place : HTMLElement,
 
-    ) {
-    this.place = place
+  ) {
+    this.place = place;
     this.render();
   }
 
-  //Functions
-    //Render (make the thing)
-    render() {
-      const registerContainer = document.createElement('div');
-  
-      registerContainer.innerHTML = `
+  // Functions
+  // Render (make the thing)
+  render() {
+    const registerContainer = document.createElement('div');
+
+    registerContainer.innerHTML = `
       <h1>Register</h1>
 
       <form id="registerForm">
@@ -34,44 +32,42 @@ export default class Register {
       </form>
       `;
 
-  
-      this.place.append(registerContainer);
-  
-      registerContainer.addEventListener("submit", (e: Event) => {
-        e.preventDefault();
-      
-        //Email and password for logging in
-        const formdata = new FormData(e.target);
-        let email = formdata.get('email');
-        let password = formdata.get('password');
-      
-        // Additional info
-        let name = formdata.get('name');
-      
-        console.log('email: ' + email + ', password: ' + password);
+    this.place.append(registerContainer);
 
-        createUserWithEmailAndPassword(auth, email, password)
-          .then((cred) => {
-            //Whatever you wants to happen after user is created
-        
-              // Empty form
-                // registerContainer.reset();
-      
-              // Console log users information
-                console.log("user created:", cred.user.uid);
-      
-              // Add user to database
-                setDoc(doc(db, "users", cred.user.uid), {
-                  email: email,
-                  id: cred.user.uid,
-                  naam: name,
-                })
-      
-          })
-          .catch((err) => {
-            console.log(err.message);
+    registerContainer.addEventListener('submit', (e: Event) => {
+      e.preventDefault();
+
+      // Email and password for logging in
+      const formdata = new FormData(e.target);
+      const email = formdata.get('email');
+      const password = formdata.get('password');
+
+      // Additional info
+      const name = formdata.get('name');
+
+      console.log(`email: ${email}, password: ${password}`);
+
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((cred) => {
+          // Whatever you wants to happen after user is created
+
+          // Empty form
+          // registerContainer.reset();
+
+          // Console log users information
+          console.log('user created:', cred.user.uid);
+
+          // Add user to database
+          setDoc(doc(db, 'users', cred.user.uid), {
+            email,
+            id: cred.user.uid,
+            naam: name,
           });
-      });
-      return registerContainer;
-    }
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    });
+    return registerContainer;
+  }
 }
