@@ -19,6 +19,8 @@ export default class Register {
   // Render (make the thing)
   render() {
     const registerContainer = document.createElement('div');
+    registerContainer.classList.add('registerContainer');
+    registerContainer.classList.add('hidden');
 
     registerContainer.innerHTML = `
       <h1>Register</h1>

@@ -1,84 +1,81 @@
-// import Card from "./Components/Card2";
-import Card from "./Components/Card3";
-import NewProject from "./Components/NewProject";
-import SearchMember from "./Components/Search";
+import {
+  onSnapshot,
+  collection,
+  query,
+  where,
+  doc,
+  getDocs,
+  updateDoc,
+  arrayUnion,
+  Query
+} from 'firebase/firestore';
+import {
+  db
+} from './Lib/firebase-init';
+import { v4 as uuidv4 } from 'uuid';
 
-// import EditableText from "./Components/EditableText";
+import NewProject from './Components/NewProject' ;
+import Login from './Components/Login';
+import Register from './Components/Register';
 
+import TodoList from './Components/TodoList' ;
+import Invite from './Components/invites' ;
 
-import  Login  from "./Components/Login";
-
-import  Register  from "./Components/Register";
-// import  Text  from "./Components/EditableText";
-// import {newProject} from "./Lib/firebase-init";
-
-
-const login = new Login(document.querySelector("#root")!);
-const register = new Register(document.querySelector("#root")!);
-// // const something = new Text("test", document.querySelector("#root")!, )
-const cards = new Card(document.querySelector("#root")!);
-const newProject = new NewProject(document.querySelector("#root")!);
-const Searchmember = new SearchMember(document.querySelector("#root")!);
-
-
-
-// const text = new EditableText();
-// TODO: lib - firebase-init, css, index.html
-
-// import {Card, Comment, EditableText, TodoList} from "./Components/index";
-
+new NewProject(document.querySelector("#newProjectContainer")!);
+new Invite(document.querySelector("#inviteContainer")!);
+new Login(document.querySelector("#root")!);
+new Register(document.querySelector("#root")!);
 
 
-// const newProject = (e) => {
-
-//   const formdata = new FormData(e?.target);
-
-//   const project_name = formdata.get('newProjectName');
-//   const project_description = formdata.get('newProjectDescription');
-//   const project_duedate = formdata.get('newProjectDueDate');
-//   const project_worktime = formdata.get('newProjectWorktime');
-
-
-//   const docRef = addDoc(collection(db, "projects"), {
-//     name: project_name,
-//     description: project_description,
-//     dueDate: project_duedate,
-//     publicationDate: serverTimestamp(),
-//     workTime: project_worktime,
-
-//     members: ["123"],
-//     remarks: {
-//       member: {
-//         comment: "Project made!",
-//         memberId: "123",
-//         name: "Member",
-//         publicationDate: serverTimestamp(),
-//       }
-//     },
-//     taskMembers: {
-//       member: {
-//         memberId: "123",
-//         name: "Member",
-//         status: "Not started"
-//       }
-//     },
-//     todos: {
-//       todo: {
-//         name: "First todo",
-//       }
-//     }
-
-//   });
-//   console.log("Document written with ID");
+// const todo1 = new TodoList(document.querySelector("#projectContainer")!, "todolist");
+// const todo2 = new TodoList(document.querySelector("#projectContainer")!, "todolist");
+// const todo3 = new TodoList(document.querySelector("#projectContainer")!, "todolist");
 
 
 
-//   console.log(project_description);
+// const unsub = onSnapshot(doc(db, "lists", "_1e3a33fd-27c8-4f27-b888-015664585600"), (doc) => {
+//   console.log("Current data: ", doc.data());
+// });
 
-// }
+// let user_id = sessionStorage.getItem("user_id");
 
-// const newProjectButton = document.getElementById('newProjectForm');
-// newProjectButton?.addEventListener('submit', (e) => {
-//   e.preventDefault();
-//   newProject(e);
-// })
+//     const q: Query = query(collection(db, "projects"), where("members", "array-contains", user_id));
+
+//     const querySnapshot = getDocs(q);
+
+//     querySnapshot.then((snapshot) => {
+//       snapshot.forEach((docc) => {
+//         let project = docc.data();
+//         console.log(project);
+//         // const cardContainer = document.createElement('div');
+//         // cardContainer.classList.add('project');
+
+//         // let projectName = project.name;
+//         // let projectDescription = project.description;
+//         // let projectDueDate = project.dueDate;
+//         // let projectId = project.id;
+
+//         // let projectMembers = project.taskMembers;
+
+//         // this.render(projectName, projectDescription, projectDueDate, projectMembers, projectId, false);        
+//       })
+//     })
+
+// import { collection, query, where, onSnapshot } from "firebase/firestore";
+// , where("state", "==", "CA")
+const q = query(collection(db, "projects"));
+const unsubscribe = onSnapshot(q, (querySnapshot) => {
+  const projects : Object[] = [];
+  let projectContainer : HTMLDivElement = document.querySelector("#projectContainer")!;
+  projectContainer.innerHTML = ``;
+  querySnapshot.forEach((doc) => {
+      projects.push(doc.data());
+      // console.log(doc.data().todos);
+      doc.data().todos.forEach(element => {
+        // console.log(element);
+      });
+      new TodoList(projectContainer, doc.data().name, doc.data().description, doc.data().taskMembers, doc.data().todos, doc.data().projectId);
+  });
+  console.log("Current projects: " + projects);
+});
+

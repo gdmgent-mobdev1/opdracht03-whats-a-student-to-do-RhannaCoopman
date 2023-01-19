@@ -11,11 +11,10 @@ export interface Todo {
   estimatedWorkTime : Time,
 }
 
-interface TaskMember {
+export interface TaskMember {
   memberId : string,
   name : string,
   status : 'Done' | 'Working' | 'Not started',
-  completingTime : Time,
 }
 
 interface Time {

@@ -28,8 +28,7 @@ export default class EditableText {
     text: string,
     place: HTMLElement,
     card: Card,
-    property:
-    Property,
+    property:Property,
     typeOfInput: string,
     id: string, 
     parentId: string

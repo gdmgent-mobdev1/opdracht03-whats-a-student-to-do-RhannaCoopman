@@ -2,24 +2,9 @@
 import { v4 as uuidv4 } from 'uuid';
 import { root, State } from '../Lib';
 import { dragstartHandler } from '../Lib/dragAndDrop';
-import { deleteCardFromFirebase } from '../lib/firebase-init';
 import Comment from './Comment';
-import editableText from './editableText';
+import EditableText from './EditableText';
 import TodoList from './TodoList';
-import {
-  onSnapshot,
-  collection,
-  query, 
-  where,
-  doc, 
-  getDocs,
-  updateDoc,
-  arrayUnion,
-  Query
-} from 'firebase/firestore';
-import {
-  db
-} from '../Lib/firebase-init';
 
 export default class Card {
   place: HTMLElement;
@@ -48,61 +33,30 @@ export default class Card {
 
   menuComments?: HTMLDivElement ;
 
-  editableDescription?: editableText ;
+  editableDescription?: EditableText ;
 
-  editableText?: editableText;
+  editableTitle?: EditableText;
 
   id: string;
 
-  parentId: string;
-
-  constructor(title: string, place: HTMLElement, todoList: TodoList, id = '_'+uuidv4(), parentId:string) {
-    this.id = id;
+  constructor(text: string, place: HTMLElement, id: string, cardId: string) {
+    this.id = cardId;
     this.place = place;
-    this.todoList = todoList;
+
+    // this.todoList = todoList;
     this.state = {
-      id,
-      title,
+      text,
       description: 'Click to write a description...',
       comments: [],
     };
-    this.parentId = parentId;
-
     this.render();
-
   }
-  getInfoFromDatabase(): void {
-    const q : Query = query(collection(db, "projects"), where("members", "array-contains", "234"));
-
-    const querySnapshot = getDocs(q);
-
-    querySnapshot.then((snapshot) => {
-      snapshot.forEach((docc) => {
-        let project = docc.data();
-        console.log(project);
-
-        const cardContainer = document.createElement('div');
-        cardContainer.classList.add('project');
-
-
-
-        for (const key in project.taskMembers) {
-          let memberInfo = project.taskMembers[key];
-          console.log(memberInfo);
-        };
-      });
-    });
-  };
 
   render(): void {
-    this.getInfoFromDatabase();
-
     this.card = document.createElement('div');
     this.card.classList.add('card');
     this.card.setAttribute('draggable', 'true');
     this.card.id = this.id;
-    this.deleteButton = document.createElement('button');
-    this.deleteButton.classList.add('delete-btn')
     this.card.addEventListener('click', (e) => {
       if (e.target !== this.deleteButton) {
         this.showMenu.call(this);
@@ -111,14 +65,12 @@ export default class Card {
     this.card.addEventListener('dragstart', dragstartHandler);
 
     this.p = document.createElement('p');
-    this.p.innerText = 'testtitel';
+    this.p.innerText = this.state.text;
 
     this.deleteButton = document.createElement('button');
-    this.deleteButton.classList.add('delete-btn')
-
+    this.deleteButton.innerText = 'X';
     this.deleteButton.addEventListener('click', () => {
       this.deleteCard.call(this);
-      deleteCardFromFirebase(this.parentId!, this.id);
     });
 
     this.card.append(this.p);
@@ -130,11 +82,11 @@ export default class Card {
   deleteCard(): void {
     this.card?.remove();
     const i = this.todoList.cardArray.indexOf(this);
-    this.todoList.cardArray.splice(i, 1);
+    console.log(i);
+    // this.todoList.cardArray.splice(i, 1);
   }
 
   showMenu(): void {
-
     // Create elements
     this.menu = document.createElement('div');
     this.menuContainer = document.createElement('div');
@@ -147,15 +99,13 @@ export default class Card {
     // Add class names
     this.menu.className = 'menu';
     this.menuContainer.className = 'menuContainer';
-    this.menu.setAttribute('data-id', this.id);
-    this.menu.setAttribute('data-todolist-id', this.parentId )
     this.menuTitle.className = 'menuTitle';
     this.menuDescription.className = 'menuDescription';
     this.menuComments.className = 'menuComments';
     this.commentsInput.className = 'commentsInput comment';
     this.commentsButton.className = 'commentsButton btn-save';
-    
-    // Add inner title
+
+    // Add inner Text
     this.commentsButton.innerText = 'Add';
     this.commentsInput.placeholder = 'Write a comment...';
 
@@ -181,9 +131,10 @@ export default class Card {
     this.menu.append(this.commentsButton);
     this.menu.append(this.menuComments);
     this.menuContainer.append(this.menu);
-    root.append(this.menuContainer);
-    this.editableDescription = new editableText(this.state.description, this.menuDescription, this, 'description', 'textarea', this.id, this.parentId);
-    this.editableText = new editableText(this.state.title, this.menuTitle, this, 'title', 'input', this.id, this.parentId);
+    (document.querySelector(".projectsContainer")!).append(this.menuContainer);
+
+    this.editableDescription = new EditableText(this.state.description, this.menuDescription, this, 'description', 'textarea');
+    this.editableTitle = new EditableText(this.state.text, this.menuTitle, this, 'text', 'input');
 
     this.renderComments();
   }

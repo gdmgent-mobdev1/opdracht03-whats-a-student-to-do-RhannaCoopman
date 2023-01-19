@@ -41,6 +41,8 @@ export default class SearchMember {
 
   member: string;
 
+  aDiv : HTMLDivElement;
+
   NewMemberForm: HTMLFormElement;
 
   NewMemberInput: HTMLInputElement;
@@ -78,40 +80,46 @@ export default class SearchMember {
       this.NewMemberButton.setAttribute('value', '+');
       this.NewMemberButton.classList.add("addMember");
 
+      this.aDiv = document.createElement('div');
+      this.aDiv.innerText = 'A';
+
       this.NewMemberForm.append(this.NewMemberInput);
       this.NewMemberForm.append(this.NewMemberButton);
+      this.NewMemberForm.append(this.aDiv);
+
       this.place.append(this.NewMemberForm);
   }
 
   getAllUsers() {
     const filterFunction = () => {
       const input = document.getElementById("myInput");
-      console.log(input);
+      // console.log(input);
       const filter = input.value.toUpperCase();
-      console.log(filter);
+      // console.log(filter);
       const div = document.getElementById("searchDiv");
       let a = div.getElementsByTagName("a");
-      console.log(a);
       for (let i = 0; i < a.length; i++) {
+        
 
+        // let valid = 0;
         let txtValue = a[i].textContent || a[i].innerText;
         if (txtValue.toUpperCase().indexOf(filter) > -1) {
           a[i].style.display = "";
           
         } else {
           a[i].style.display = "none";
-        }
-        if((txtValue.toUpperCase().indexOf(filter) > -1) < 1) {
-          this.NewMemberButton.setAttribute('value', 'geen overeenkomsten');
-          this.NewMemberButton.setAttribute('isDisabled', 'true');
 
         }
-        else {
-          this.NewMemberButton.setAttribute('value', '');
-          this.NewMemberButton.setAttribute('isDisabled', 'false');
+        // console.log(valid);
+        // if(valid > 1) {
+        //   this.NewMemberButton.setAttribute('value', 'geen overeenkomsten');
+        //   this.NewMemberButton.setAttribute('isDisabled', 'true');
 
-
-        }
+        // }
+        // else {
+        //   this.NewMemberButton.setAttribute('value', '');
+        //   this.NewMemberButton.setAttribute('isDisabled', 'false');
+        // }
       }
     }
 
@@ -122,7 +130,6 @@ export default class SearchMember {
 
     this.place.append(this.div);
     const id = this.place.id;
-    console.log(id);
 
     this.NewMemberButton = document.createElement('input');
     this.NewMemberButton.setAttribute('type', 'submit');
@@ -135,22 +142,13 @@ export default class SearchMember {
       e.preventDefault();
       let memberId = this.NewMemberButton.id;
       let memberName = this.NewMemberButton.name;
-      let memberLength = "member" + length;
-      let number = 0;
-      number++;
         async function database() {
-          console.log(number)
-          
           const projectRef = await doc(db, "projects", id);
-          const docSnap = await getDoc(projectRef);
-          let memberLenght = docSnap.data().taskMembers;
-          let length = Object.keys(docSnap.data().taskMembers).length;
-          let memberLength = "member" + length;
 
           updateDoc(projectRef, {
-            members: arrayUnion(memberId),
+            invitedMembers: arrayUnion(memberId),
 
-            taskMembers: arrayUnion({id: memberId, status: "Not started", name: memberName}),
+            taskMembers: arrayUnion({id: memberId, status: "Invited", name: memberName}),
           });
     }
     database();
@@ -181,6 +179,7 @@ export default class SearchMember {
 
         this.memberInfoDiv = document.createElement('a')
         this.memberInfoDiv.innerText = memberInfo;
+        // this.memberInfoDiv.style.display = 'none';
         this.div.append(this.memberInfoDiv);
 
         this.memberInfoDiv.addEventListener('click', () => {

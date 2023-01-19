@@ -5,11 +5,14 @@ import {
   doc, 
   setDoc,
   updateDoc,
+  deleteDoc,
 } from 'firebase/firestore';
 import {
   db
 } from '../Lib/firebase-init';
 import Card from './Card3';
+import { v4 as uuidv4 } from 'uuid';
+
 
 export default class NewProject {
   newProjectForm: HTMLFormElement;
@@ -111,48 +114,48 @@ export default class NewProject {
       //   console.log(user_id);
       // }
   
+// set project
+const setProject = async () => {
+  let projectId : string = uuidv4();
+  await setDoc(doc(db, "projects", projectId), {
+    name: project_name,
+    description: project_description,
+    dueDate: project_duedate,
+    publicationDate: serverTimestamp(),
+    workTime: project_worktime,
+    projectId: projectId,
 
-
-    async function async() {
-      const docRef = await addDoc(collection(db, "projects"), {
-        name: project_name,
-        description: project_description,
-        dueDate: project_duedate,
+    members: [user_id],
+    invitedMembers: [],
+    remarks: {
+      member: {
+        comment: "Project made!",
+        memberId: user_id,
+        name: "Member",
         publicationDate: serverTimestamp(),
-        workTime: project_worktime,
-
-        members: [user_id],
-        remarks: {
-          member: {
-            comment: "Project made!",
-            memberId: user_id,
-            name: "Member",
-            publicationDate: serverTimestamp(),
-          }
-        },
-        taskMembers: [          
-          {
-            memberId: user_id,
-            name: "Member",
-            status: "Not started"
-          }]
-        ,
-        todos: {
-          todo: {
-            name: "First todo",
-          }
-        },
-      });
+      }
+    },
+    taskMembers: [          
+      {
+        memberId: user_id,
+        name: "Member",
+        status: "Not started"
+      }]
+    ,
+    todos: [
+      "Maak je eerste todo!"
+    ],
+  });
 
 
-      console.log("Document written with ID: ", docRef.id);
-      const idRef = doc(db, "projects", docRef.id);
-      await updateDoc(idRef, {
-        id: docRef.id,
-      });
-    }
+  // console.log("Document written with ID: ", docRef.id);
+  // const idRef = doc(db, "projects", docRef.id);
+  // await updateDoc(idRef, {
+  //   id: docRef.id,
+  // });
+}
 
-    async();
+  setProject();
 
 
       

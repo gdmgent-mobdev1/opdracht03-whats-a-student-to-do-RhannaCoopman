@@ -9,8 +9,17 @@ import {
   addDoc,
   setDoc,
   serverTimestamp,
+  updateDoc,
+  arrayUnion,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import {
+  db
+} from './Lib/firebase-init';
+// import {auth, db} from "./auth.ts";
+
+import { v4 as uuidv4 } from 'uuid';
+
 
 // TODO: Add SDKs for Firebase products that you want to use
 
@@ -37,40 +46,70 @@ const db = getFirestore();
 
 export {auth, db};
 
-// get data from firestore
-export const fireStoreDb = getFirestore(fireStoreApp);
-export const addTodoFirebase = async(text: string, todoId: string) => {
-  const cardsSnapShot = collection(fireStoreDb, `lists/${todoId}/cards`);
+
+// // get data from firestore
+// export const fireStoreDb = getFirestore(fireStoreApp);
+// export const addTodoFirebase = async(text: string, todoId: string) => {
+//   console.log("test");
+//   const cardsSnapShot = doc(db, "projects", "8IHv6Rm6OEGThDdt2fq0");
   
-  const docRef = await addDoc(cardsSnapShot, {
-    title: text,
-    description: '',
-    comments: []
-    }
-  );
-  return docRef.id;
-}
+//   const docRef = await updateDoc(cardsSnapShot, {
+//     todos: arrayUnion({    
+//       title: text,
+//       description: '',
+//       comments: []})
+//     }
+//   );
+//   return docRef.id;
+// }
 
-export const updateTodoFirebase = async(todoListId: string, id: string, attribute: string, value: string) => {
-  console.log(todoListId, id, attribute, value);
-  if(attribute === 'title'){
-    const answer = await setDoc(doc(fireStoreDb, `lists/${todoListId}/cards`, id), {
-      title: value
-    }, { merge: true });
-  }else{
-    const answer = await setDoc(doc(fireStoreDb, `lists/${todoListId}/cards`, id), {
-      description: value
-    }, { merge: true });
-  }
+// export const updateTodoFirebase = async(todoListId: string, id: string, attribute: string, value: string) => {
+//   console.log(todoListId, id, attribute, value);
+//   if(attribute === 'title'){
+//     const answer = await setDoc(doc(db, "projects", id), {
+//       name: value
+//     }, { merge: true });
+//   }else{
+//     const answer = await setDoc(doc(db, "projects", id), {
+//       description: value
+//     }, { merge: true });
+//   }
   
+// }
+
+
+// export const deleteTodoListFirebase = async(id :string) => {
+//   await deleteDoc(doc(db, "projects", id));
+//   await setDoc(doc(db, "projects", id), {
+//     name: "nieuwe naam",
+//   });
+//   console.log(id);
+// }
+
+export const deleteTodoListFirebase = async(id :string) => {
+  await deleteDoc(doc(db, "projects", id));
+  // console.log(id);
+  console.log(id);
 }
 
 
-export const deleteTodoListFirebase = async(id: string) => {
-  await deleteDoc(doc(fireStoreDb, "lists", id));
-}
+
+// export const deleteTodoListFirebase = async() => {
+//   console.log("test");
+//   const cardsSnapShot = doc(db, "projects", "8IHv6Rm6OEGThDdt2fq0");
+  
+//   const docRef = await updateDoc(cardsSnapShot, {
+//     todos: arrayUnion({    
+//       title: text,
+//       description: '',
+//       comments: []})
+//     }
+//   );
+//   // return docRef.id;
+// }
 
 export const deleteCardFromFirebase = async(todoListId: string, id: string) => {
-  await deleteDoc(doc(fireStoreDb, `lists/${todoListId}/cards`, id));
+  await deleteDoc(doc(db, "projects", id));
 }
+
 

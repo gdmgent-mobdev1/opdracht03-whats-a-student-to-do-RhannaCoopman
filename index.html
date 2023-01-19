@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,122 +8,65 @@
     <title>Cards</title>
     <link rel="stylesheet" href="./src/css/style.css">
 </head>
-<body>
 
-    <!-- </div>
+<body>
+    <main>
+
+        <!-- </div>
     <div id="addTodoListDiv">
         <input type="text" id="addTodoListInput" class="comment">
         <button id="addTodoListButton" class="btn-save">Add new to-do list</button>
     </div> -->
 
-    <!-- <form id="loginForm">
+        <!-- <form id="loginForm">
         <label>Email<input id="loginInputEmail" type="text" value="email@email.com" name="email"></label>
         <label>Wachtwoord<input id="loginInputPassword" type="password" value="wachtwoord" name="password"></label>
        
         <input type="submit" id="loginButton" value="Login button!">
     </form>
     -->
+        <header>
+            <h1>Trello-Like</h1>
+            <button id="logout">Log out</button>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="#">Icon</a></li>
+                <li><a href="#">Icon</a></li>
+                <li><a href="#">Icon</a></li>
+                <li><a href="#">Icon</a></li>
+                <li><a href="#">Icon</a></li>
+                <li><a href="#">Icon</a></li>
+
+            </ul>
+        </nav>
+
+        <div id="root">
+
+            <div class="projectsContainer hidden">
+                <div class="inviteAndNew">
+                    <div id="newProjectContainer" class="newProjectContainer">
+                        <h1>New project</h1>
+                    </div>
     
-    <div id="root"></div> 
-
-    <div class="projectsContainer">
-        <div class="projectContainer">
-            
-        </div>
-        <!-- <div class="projectContainer">
-            <h3>Uitnodigingen</h3>
-
-            <div class="project">
-                <h4>Je bent uitgenodigd voor</h4>
-                <p>Een korte beschrijving</p>
-                <div class="flex"><p>Due: 12/12</p><p>Tasks: 3</p><p>Time : 4u</p></div>
-                <button class="green">Aanvaard</button>
-                <button class="blue">Bekijk project</button>
-                <button class="red">Sla af</button>
-
-                <form>
-                    <input type="text" value="v5S4hoR9UwS8tK08nvpUs94Illq1" required>
-                    <button type="submit">Submit</button>
-                </form>
+                    <div id="inviteContainer" class="inviteContainer">
+                        <h1>Invites</h1>
+    
+                    </div>
+                </div>
+    
+                <div id="projectContainer" class="projectContainer">
+                    <!-- <h1>Projects</h1> -->
+                </div>
+    
+    
             </div>
 
-            <div class="project">
-                <h4>Je bent uitgenodigd voor</h4>
-                <p>Een korte beschrijving</p>
-                <div class="flex"><p>Due: 12/12</p><p>Tasks: 3</p><p>Time : 4u</p></div>
-                <button class="green">Aanvaard</button>
-                <button class="blue">Bekijk project</button>
-                <button class="red">Sla af</button>
-            </div>
-        </div>
+        </div> 
 
-        <div class="projectContainer">
-            <h3>Projecten</h3>
-
-            <div class="project">
-                <h4>Mobdev: Whats a students to do</h4>
-                <p>Een korte beschrijving</p>
-                <div class="flex"><p>Due: 12/12</p><p>Tasks: 3</p><p>Time : 4u</p></div>
-                <button class="green">Aanvaard</button>
-                <button class="blue">Bekijk project</button>
-                <button class="red">Sla af</button>
-            </div>
-
-            <div class="project">
-                <h4>Je bent uitgenodigd voor</h4>
-                <p>Een korte beschrijving</p>
-                <div class="flex"><p>Due: 12/12</p><p>Tasks: 3</p><p>Time : 4u</p></div>
-                <button class="green">Aanvaard</button>
-                <button class="blue">Bekijk project</button>
-                <button class="red">Sla af</button>
-            </div>
-
-        </div> -->
-
-    
-    </div>
-
-    <!-- <form id="newProjectForm">
-        <input type="text" name="newProjectName" value="naam">
-        <input type="text" name="newProjectDescription" value="description">
-        <input type="date" name="newProjectDueDate" value="">
-        <input type="time" name="newProjectWorktime" value="2:00">
-
-
-        <button type="submit">Nieuw project</button>
-    </form>
-
-    <nav>
-        <ul>
-            <li><a href="#">Icon</a></li>
-            <li><a href="#">Icon</a></li>
-            <li><a href="#">Icon</a></li>
-            <li><a href="#">Icon</a></li>
-            <li><a href="#">Icon</a></li>
-            <li><a href="#">Icon</a></li>
-
-        </ul>
-    </nav> -->
-    
-
-        <!-- <div id="addTodoListDiv">
-            <input type="text" id="addTodoListInput" class="comment">
-            <button id="addTodoListButton" class="btn-save">Add list</button>
-        </div>
-        <div id="app"></div> -->
-
-        <form id="newProjectForm">
-            <input type="text" name="newProjectName" value="naam" class="comment">
-            <input type="text" name="newProjectDescription" value="description" class="comment">
-            <input type="date" name="newProjectDueDate" value="" class="comment">
-            <input type="time" name="newProjectWorktime" value="2:00" class="comment">
-    
-    
-            <button type="submit" class="btn-save">Nieuw project</button>
-        </form>
 
         <script defer type="module" src="/src/app.ts"></script>
-
+    </main>
 </body>
-</html>
 
+</html>
