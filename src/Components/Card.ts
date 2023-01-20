@@ -1,7 +1,9 @@
 /* eslint-disable import/no-cycle */
+import { updateCurrentUser } from 'firebase/auth';
 import { v4 as uuidv4 } from 'uuid';
 import { root, State } from '../Lib';
 import { dragstartHandler } from '../Lib/dragAndDrop';
+// import { updateTodoFirebase } from '../Lib/firebase-init';
 import Comment from './Comment';
 import EditableText from './EditableText';
 import TodoList from './TodoList';

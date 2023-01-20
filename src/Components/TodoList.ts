@@ -1,12 +1,14 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import { dragoverHandler, dropHandler } from '../Lib/dragAndDrop';
-
 // eslint-disable-next-line import/no-cycle
 import Card from './Card';
 import SearchMember from './Search';
 import {TaskMember} from '../Lib/todoInterface';
 import { initializeApp } from "firebase/app";
+import {deleteTodoListFirebase} from "../Lib/firebase-init";
+import Detailpage from './Detailpage';
+
 
 import { 
   getFirestore, 
@@ -134,14 +136,22 @@ export default class TodoList {
       }
     });
     this.deleteButton.addEventListener('click', () => {
-      const deleteTodoListFirebase = async(id :string) => {
-        await deleteDoc(doc(db, "projects", id));
-        // console.log(id);
-        console.log(id);
-      }
-      deleteTodoListFirebase(this.id);
-      // document.querySelector(`#${this.id}`)?.remove();
+      // const deleteTodoListFirebase = async(id :string) => {
+      //   await deleteDoc(doc(db, "projects", id));
+      //   // console.log(id);
+      //   console.log(id);
+      // }
+      // deleteTodoListFirebase(this.id);
+      // // document.querySelector(`#${this.id}`)?.remove();
+      deleteTodoListFirebase();
+      console.log('deleteTodoListFirebase')
     });
+
+    this.todoListElement.addEventListener('click', (e : Event) => {
+      e.preventDefault();
+      new Detailpage(this.id);
+
+    })
 
 
 
@@ -157,7 +167,7 @@ export default class TodoList {
         this.todoListElement.append(this.todosDiv);
 
       }
-
+    
 
   createTodos(): void {
     this.todosDiv = document.createElement('div');

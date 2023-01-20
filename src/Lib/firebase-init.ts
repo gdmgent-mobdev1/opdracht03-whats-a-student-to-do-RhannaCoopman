@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 
 import { initializeApp } from "firebase/app";
+
 import { 
   getFirestore, 
   doc, 
@@ -12,10 +13,9 @@ import {
   updateDoc,
   arrayUnion,
 } from "firebase/firestore";
+
 import { getAuth } from "firebase/auth";
-import {
-  db
-} from './Lib/firebase-init';
+
 // import {auth, db} from "./auth.ts";
 
 import { v4 as uuidv4 } from 'uuid';
@@ -63,19 +63,19 @@ export {auth, db};
 //   return docRef.id;
 // }
 
-// export const updateTodoFirebase = async(todoListId: string, id: string, attribute: string, value: string) => {
-//   console.log(todoListId, id, attribute, value);
-//   if(attribute === 'title'){
-//     const answer = await setDoc(doc(db, "projects", id), {
-//       name: value
-//     }, { merge: true });
-//   }else{
-//     const answer = await setDoc(doc(db, "projects", id), {
-//       description: value
-//     }, { merge: true });
-//   }
+export const updateTodoFirebase = async(todoListId: string, id: string, attribute: string, value: string) => {
+  console.log(todoListId, id, attribute, value);
+  if(attribute === 'title'){
+    const answer = await setDoc(doc(db, "projects", id), {
+      name: value
+    }, { merge: true });
+  }else{
+    const answer = await setDoc(doc(db, "projects", id), {
+      description: value
+    }, { merge: true });
+  }
   
-// }
+}
 
 
 // export const deleteTodoListFirebase = async(id :string) => {
@@ -86,12 +86,15 @@ export {auth, db};
 //   console.log(id);
 // }
 
-export const deleteTodoListFirebase = async(id :string) => {
-  await deleteDoc(doc(db, "projects", id));
-  // console.log(id);
-  console.log(id);
-}
+// export const deleteTodoListFirebase = async() => {
+//   // await deleteDoc(doc(db, "projects", id));
+//   // console.log(id);
+//   console.log('deleteTodoListFirebase');
+// }
 
+export const deleteTodoListFirebase = () => {
+  console.log('without async');
+}
 
 
 // export const deleteTodoListFirebase = async() => {

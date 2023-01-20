@@ -14,6 +14,9 @@ import {
 } from './Lib/firebase-init';
 import { v4 as uuidv4 } from 'uuid';
 
+
+import PomodoroTimer from './Components/Pomodoro' ;
+
 import NewProject from './Components/NewProject' ;
 import Login from './Components/Login';
 import Register from './Components/Register';
@@ -25,6 +28,7 @@ new NewProject(document.querySelector("#newProjectContainer")!);
 new Invite(document.querySelector("#inviteContainer")!);
 new Login(document.querySelector("#root")!);
 new Register(document.querySelector("#root")!);
+new PomodoroTimer(25, 5, document.querySelector(".projectsContainer")!);
 
 
 // const todo1 = new TodoList(document.querySelector("#projectContainer")!, "todolist");
@@ -72,7 +76,7 @@ const unsubscribe = onSnapshot(q, (querySnapshot) => {
       projects.push(doc.data());
       // console.log(doc.data().todos);
       doc.data().todos.forEach(element => {
-        // console.log(element);
+        console.log(element);
       });
       new TodoList(projectContainer, doc.data().name, doc.data().description, doc.data().taskMembers, doc.data().todos, doc.data().projectId);
   });

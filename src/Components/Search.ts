@@ -21,41 +21,44 @@ import {
   db
 } from '../Lib/firebase-init';
 
-
 export default class SearchMember {
-  nameElement: HTMLHeadingElement;
+  nameElement!: HTMLHeadingElement;
 
-  name: string;
+  name !: string;
 
-  descriptionElement: HTMLParagraphElement;
+  descriptionElement !: HTMLParagraphElement;
 
-  description: string;
+  description !: string;
 
-  dueDateElement: HTMLParagraphElement;
+  dueDateElement !: HTMLParagraphElement;
 
-  dueDate: string;
+  dueDate !: string;
 
-  allMembersDiv: HTMLDivElement;
+  allMembersDiv !: HTMLDivElement;
 
-  memberDiv: HTMLDivElement;
+  memberDiv !: HTMLDivElement;
 
-  member: string;
+  member !: string;
 
-  aDiv : HTMLDivElement;
+  aDiv !: HTMLDivElement;
 
-  NewMemberForm: HTMLFormElement;
+  NewMemberForm !: HTMLFormElement;
 
-  NewMemberInput: HTMLInputElement;
+  NewMemberInput !: HTMLInputElement;
 
-  NewMemberButton: HTMLInputElement;
+  NewMemberButton !: HTMLInputElement;
 
-  memberName: string
+  memberName !: string;
 
-  card ? : HTMLDivElement;
+  Input ! : HTMLInputElement;
+
+  memberInfoDiv !: HTMLDivElement;
+
+  card ! : HTMLDivElement;
 
   place: HTMLElement;
 
-  div: HTMLFormElement;
+  div ?: HTMLFormElement;
 
   constructor(place: HTMLElement) {
     this.place = place;
