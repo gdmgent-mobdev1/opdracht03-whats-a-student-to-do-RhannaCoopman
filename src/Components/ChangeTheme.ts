@@ -20,7 +20,6 @@ export default class ChangeTheme {
       
       if(sessionStorage.getItem('theme') === "light") {
         sessionStorage.setItem('theme', "dark");
-        console.log('change to dark');
         this.changeButton.innerHTML = `change to light`;
 
         body?.classList.add("darktheme");
@@ -29,7 +28,6 @@ export default class ChangeTheme {
         
       } else {
         sessionStorage.setItem('theme', "light");
-        console.log('change to light');
         body?.classList.add("lighttheme");
         body?.classList.remove("darktheme");
         this.changeButton.innerHTML = `change to dark`;

@@ -2,30 +2,30 @@
 import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithRedirect,
+  getRedirectResult,
+  signInWithPopup,
   GithubAuthProvider,
-  signInWithPopup
 }
-  from 'firebase/auth';
+from 'firebase/auth';
 
 import {
-  auth, 
+  auth,
 } from '../Lib/firebase-init';
 
-import {renderTodos} from '../app';
+import {
+  renderTodos
+} from '../app';
 
 import Card from './Card2';
 
 export default class Login {
-  // Velden
-  // email : string;
-  // password : string;
-  // auth : any;
-
-  place : HTMLElement;
+  place: HTMLElement;
 
   // Constructor
   constructor(
-    place : HTMLElement,
+    place: HTMLElement,
 
   ) {
     this.place = place;
@@ -50,37 +50,30 @@ export default class Login {
 
     <button id="login_github">Login met github</button>
 
-    <button class="toRegistration">Make an account</button>
+    <button class="toRegistration">Registeer</button>
 
     `;
 
     this.place.append(loginContainer);
 
-    loginContainer.addEventListener('submit', (e : Event) => {
+    loginContainer.addEventListener('submit', (e: Event) => {
       e.preventDefault();
       const formdata = new FormData(e.target);
       const email = formdata.get('email');
       const password = formdata.get('password');
 
       signInWithEmailAndPassword(auth, email, password).then((cred) => {
-        // Whatever you wants to happen after user has logged in
 
-        // Console log users information
-        console.log('user logged in:', cred.user.uid);
-        const user_id = cred.user.uid;
-        sessionStorage.setItem("user_id", user_id);
-        console.log(sessionStorage.getItem('user_id'));
+          // Console log users information
+          const user_id = cred.user.uid;
+          sessionStorage.setItem("user_id", user_id);
 
+          // Empty form
+          loginForm.reset();
 
-        // const user_id = cred.user.uid;
+          // Show next page and hide current
 
-        // Empty form
-        // loginForm.reset();
-
-        // Show next page and hide current
-
-        
-      })
+        })
         .catch((err) => {
           console.log(err.message);
         });
@@ -88,53 +81,85 @@ export default class Login {
 
     // Go from login-screen to registration-screen
     let toRegistration = document.querySelector('.toRegistration');
-    // console.log(toRegistration);
-
     let registrationContainer = document.querySelector('.registerContainer');
-    console.log("container: " + registrationContainer);
     toRegistration!.addEventListener('click', (event => {
       event.preventDefault();
       loginContainer.classList.add('hidden');
       registrationContainer!.classList.remove('hidden');
     }))
 
-  //   //login met github
-  //   let login_github = document.querySelector('#login_github')!;
-  //   const provider = new GithubAuthProvider();
+    //Login github
+    const githubProvider = new GithubAuthProvider();
+    const githubButton = document.querySelector('#login_github');
+    githubButton?.addEventListener('click', (e) => {
+      e.preventDefault();
+      console.log('github');
+      signInWithPopup(auth, githubProvider).then((result) => {
+    // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+    const credential = GithubAuthProvider.credentialFromResult(result);
 
-  //   login_github.addEventListener('click', (e) => {
-  //     signInWithPopup(auth, provider).then((result) => {
-  //   let credential = GithubAuthProvider.credentialFromResult(result);
-  //   let token = credential.accessToken;
-  //   let user = result.user;
+    const token = credential.accessToken;
 
-  // }).catch((error) => {
-  //   console.log('Er ging iets mis:' + error)
-  // })
-  //   })
+    // The signed-in user info.
+    const user = result.user;
+
+    sessionStorage.setItem("user_id", user.uid);
+    console.log(sessionStorage.getItem("user_id"));
+    // ...
+  }).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.customData.email;
+    // The AuthCredential type that was used.
+    const credential = GithubAuthProvider.credentialFromError(error);
+    // ...
+  });
+    })
+
 
     return loginContainer;
   }
 
-  
+  googleLogin() {
+    const provider = new GoogleAuthProvider();
+    // signInWithRedirect(auth, provider);
+  signInWithPopup(auth, provider)
+  .then((result) => {
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+    // The signed-in user info.
+    const user = result.user;
+    // ...
+  }).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.customData.email;
+    // The AuthCredential type that was used.
+    const credential = GoogleAuthProvider.credentialFromError(error);
+    // ...
+  });
+    // console.log('google login');
+  }
+
+
 }
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    // console.log("user logged in");
-    document.querySelector('.projectsContainer')!.classList.remove('hidden');
-    document.querySelector('.loginContainer')!.classList.add('hidden');
-    document.querySelector('#logout')!.classList.remove('hidden');
-    // console.log(sessionStorage.getItem("user_id"));
+    document.querySelector('.projectsContainer') !.classList.remove('hidden');
+    document.querySelector('.loginContainer') !.classList.add('hidden');
+    document.querySelector('#logout') !.classList.remove('hidden');
     renderTodos();
 
-} else {
-    // console.log("user logged out");
-
-    document.querySelector('.projectsContainer')!.classList.add('hidden');
-    document.querySelector('.loginContainer')!.classList.remove('hidden');
-    document.querySelector('#logout')!.classList.add('hidden');
+  } else {
+    document.querySelector('.projectsContainer') !.classList.add('hidden');
+    document.querySelector('.loginContainer') !.classList.remove('hidden');
+    document.querySelector('#logout') !.classList.add('hidden');
     sessionStorage.setItem("user_id", "");
-    // console.log(sessionStorage.getItem("user_id"));
-}
+  }
 });

@@ -68,9 +68,6 @@ export default class EditableText {
     this.input.classList.add('comment');
 
     this.saveButton.addEventListener('click', () => {
-      // let parentId = this.place.parentElement?.getAttribute('data-todolist-id');
-      // let id = this.place.parentElement?.getAttribute('data-id');
-      //const parentId = document.querySelector(`#${this.id}`)?.closest('.todoList')?.id;
       
       if (this.input instanceof HTMLTextAreaElement || this.input instanceof HTMLInputElement) { this.title = this.input.value; }
       if (this.property === 'description' && (this.input != null)) {
@@ -107,7 +104,6 @@ export default class EditableText {
     if (this.typeOfInput === 'textarea') {
       this?.div?.append(this.saveButton);
     }
-    console.log(this.input)
-    // this.input.select();
+
   }
 }

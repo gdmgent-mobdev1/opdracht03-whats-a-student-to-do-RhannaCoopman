@@ -86,11 +86,7 @@ export default class Invite {
 
 
   render(name: string, description: string, dueDate: string, projectMembers : Object, id :string, invite: boolean): void {
-    if(sessionStorage.getItem("user_id")) {
-      let user_id = sessionStorage.getItem("user_id");
-    }
 
-    console.log(id);
 
     // create card-element
     this.card = document.createElement('div');
@@ -189,25 +185,6 @@ export default class Invite {
       
       this.allMembersDiv.append(this.memberDiv);
     }
-
-      // //add new member
-      // this.NewMemberForm = document.createElement('form');
-      // this.NewMemberForm.classList.add("memberDiv");
-      // this.NewMemberForm.classList.add("unknown");
-
-      // this.NewMemberInput = document.createElement('input');
-      // this.NewMemberInput.setAttribute('type', 'text');
-      // this.NewMemberInput.classList.add("addMember");
-
-
-      // this.NewMemberButton = document.createElement('input');
-      // this.NewMemberButton.setAttribute('type', 'submit');
-      // this.NewMemberButton.setAttribute('value', '+');
-      // this.NewMemberButton.classList.add("addMember");
-
-      // this.NewMemberForm.append(this.NewMemberInput);
-      // this.NewMemberForm.append(this.NewMemberButton);
-      // this.allMembersDiv.append(this.NewMemberForm);
   }
 
   FromInvitedToProjects (id:string): void {  

@@ -1,31 +1,30 @@
 import {
-  collection,
   serverTimestamp,
-  addDoc, 
-  doc, 
+  doc,
   setDoc,
-  updateDoc,
-  deleteDoc,
+
 } from 'firebase/firestore';
 import {
   db
 } from '../Lib/firebase-init';
-import Card from './Card3';
-import { v4 as uuidv4 } from 'uuid';
+
+import {
+  v4 as uuidv4
+} from 'uuid';
 
 
 export default class NewProject {
-  newProjectForm: HTMLFormElement;
+  newProjectForm ? : HTMLFormElement;
 
-  newProjectName: HTMLInputElement;
+  newProjectName ? : HTMLInputElement;
 
-  newProjectDescription: HTMLInputElement;
+  newProjectDescription ? : HTMLInputElement;
 
-  newProjectDueDate: HTMLInputElement;
+  newProjectDueDate ? : HTMLInputElement;
 
-  newProjectTime: HTMLInputElement;
+  newProjectTime ? : HTMLInputElement;
 
-  NewProjectButton: HTMLInputElement;
+  NewProjectButton ? : HTMLInputElement;
 
   card ? : HTMLDivElement;
 
@@ -63,7 +62,7 @@ export default class NewProject {
     //Description
     this.newProjectDescription = document.createElement('input');
     this.newProjectDescription.setAttribute('type', 'text');
-    this.newProjectDescription.setAttribute("name", "newProjectDescription");    
+    this.newProjectDescription.setAttribute("name", "newProjectDescription");
     this.newProjectDescription.setAttribute("value", "Projectbeschrijving");
     this.newProjectDescription.classList.add("addMember");
 
@@ -108,61 +107,40 @@ export default class NewProject {
       const project_worktime = formdata.get('newProjectWorktime');
       let user_id = sessionStorage.getItem("user_id");
 
-      // if(sessionStorage.getItem("user_id")) {
-      //   let user_id = sessionStorage.getItem("user_id");
+      // set project
+      const setProject = async () => {
+        let projectId: string = uuidv4();
+        await setDoc(doc(db, "projects", projectId), {
+          name: project_name,
+          description: project_description,
+          dueDate: project_duedate,
+          publicationDate: serverTimestamp(),
+          workTime: project_worktime,
+          projectId: projectId,
 
-      //   console.log(user_id);
-      // }
-  
-// set project
-const setProject = async () => {
-  let projectId : string = uuidv4();
-  await setDoc(doc(db, "projects", projectId), {
-    name: project_name,
-    description: project_description,
-    dueDate: project_duedate,
-    publicationDate: serverTimestamp(),
-    workTime: project_worktime,
-    projectId: projectId,
-
-    members: [user_id],
-    invitedMembers: [],
-    remarks: {
-      member: {
-        comment: "Project made!",
-        memberId: user_id,
-        name: "Member",
-        publicationDate: serverTimestamp(),
+          members: [user_id],
+          invitedMembers: [],
+          remarks: {
+            member: {
+              comment: "Project made!",
+              memberId: user_id,
+              name: "Member",
+              publicationDate: serverTimestamp(),
+            }
+          },
+          taskMembers: [{
+            memberId: user_id,
+            name: "Member",
+            status: "Not started"
+          }],
+          todos: [{
+            finished: false,
+            finishedBy: "",
+            todo: "Maak je eerste todo!"
+          }]
+        });
       }
-    },
-    taskMembers: [          
-      {
-        memberId: user_id,
-        name: "Member",
-        status: "Not started"
-      }]
-    ,
-    todos: [{
-      finished: false,
-      finishedBy: "",
-      todo: "Maak je eerste todo!"
-    }]
-  });
-
-
-  // console.log("Document written with ID: ", docRef.id);
-  // const idRef = doc(db, "projects", docRef.id);
-  // await updateDoc(idRef, {
-  //   id: docRef.id,
-  // });
-}
-
-  setProject();
-
-
-      
-      // location.reload();
+      setProject();
     })
-    
   }
 }

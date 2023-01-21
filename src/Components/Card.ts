@@ -85,12 +85,17 @@ export default class Card {
     });
 
 
+
     this.checkbox = document.createElement('input');
     this.checkbox.setAttribute('type', 'checkbox');
     this.checkbox.addEventListener('change', () => {
-      console.log('check clicked')
       CheckTodo(this.parentId, this.state.text);
     });
+
+    if(this.finished === true) {
+      this.card?.classList.add('green');
+      this.checkbox?.classList.add('hidden');
+    } 
 
     this.card.append(this.p);
     this.card.append(this.deleteButton);
@@ -104,7 +109,6 @@ export default class Card {
     // const i = this.todoList!.cardArray.indexOf(this);
     // console.log(i);
     // this.todoList!.cardArray.splice(i, 1);
-    console.log(this.state.text)
     deleteTodoListFirebase(this.parentId, this.state.text);
   }
   

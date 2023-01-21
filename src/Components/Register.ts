@@ -16,7 +16,6 @@ export default class Register {
   }
 
   // Functions
-  // Render (make the thing)
   render() {
     const registerContainer = document.createElement('div');
     registerContainer.classList.add('registerContainer');
@@ -32,9 +31,21 @@ export default class Register {
 
       <input type="submit" id="registerButton" value="Registeer button!">
       </form>
+
+      <button class="toLogin">Login in</button>
       `;
 
     this.place.append(registerContainer);
+
+    // Go from login-screen to registration-screen
+    let toLogin = document.querySelector('.toLogin');
+    let loginContainer = document.querySelector('.loginContainer');
+
+    toLogin!.addEventListener('click', (event => {
+      event.preventDefault();
+      loginContainer!.classList.add('hidden');
+      registerContainer!.classList.remove('hidden');
+    }))
 
     registerContainer.addEventListener('submit', (e: Event) => {
       e.preventDefault();
@@ -51,10 +62,9 @@ export default class Register {
 
       createUserWithEmailAndPassword(auth, email, password)
         .then((cred) => {
-          // Whatever you wants to happen after user is created
 
           // Empty form
-          // registerContainer.reset();
+          registerContainer.reset();
           let user_id = cred.user.uid;
           sessionStorage.setItem("user_id", user_id);
 

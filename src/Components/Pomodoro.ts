@@ -16,22 +16,39 @@ export default class PomodoroTimer {
   workTimeLabel?: HTMLLabelElement;
   pauseTimeDiv?: HTMLDivElement;
   pauseTimeLabel?: HTMLLabelElement;
-  // pauseDuration? : string;
   buttonsDiv?: HTMLDivElement;
   feedbackDiv? : HTMLDivElement;
   feedback? : string;
   timeLeftDiv?: HTMLDivElement;
-  // minutesLeft?: number;
+
+  openButton!: HTMLButtonElement;
+  buttonPlace: HTMLElement;
 
 
-  constructor(workTime: number, pauseTime: number, place : HTMLDivElement) {
+
+  constructor(workTime: number, pauseTime: number, buttonPlace: HTMLElement, place : HTMLDivElement) {
     this.workTime = workTime * 60;
     this.pauseTime = pauseTime * 60;
+    this.buttonPlace = buttonPlace;
     this.place = place;
     this.timeLeft = this.workTime;
     this.feedback = "Set a timer";
     this.isPaused = true;
-    this.render();
+    this.renderButton();
+  }
+
+  renderButton():void {
+    this.openButton = document.createElement('button');
+    this.openButton.innerHTML = `Open Pomodoro timer`;
+
+
+    this.openButton.addEventListener('click', () => {
+      let detailContainer : HTMLDivElement = document.querySelector(".detailContainer")!;
+      detailContainer.innerHTML = ``;
+      this.render();
+    })
+
+    this.buttonPlace.appendChild(this.openButton);
   }
 
   render(): void {
@@ -99,12 +116,9 @@ export default class PomodoroTimer {
     // // add event listeners
     this.workTimeInput.addEventListener("change", (e) => {
       this.workTime = this.workTimeInput!.value * 60;
-      console.log(this.workTime);
-      // console.log(this.timeLeft * 60);
     });
     this.pauseTimeInput.addEventListener("change", (e) => {
       this.pauseTime = this.pauseTimeInput!.value * 60;
-      console.log(this.pauseTime);
 
     });
 

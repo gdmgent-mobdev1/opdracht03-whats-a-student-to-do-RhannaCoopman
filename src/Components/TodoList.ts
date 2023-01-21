@@ -97,9 +97,6 @@ export default class TodoList {
       this.place.append(this.todoListElement);
     }
   }
-  // todoListElement(todoListElement: any) {
-  //   throw new Error("Method not implemented.");
-  // }
 
   createToDoListElement(): void {
     // Create elements
@@ -119,32 +116,23 @@ export default class TodoList {
     this.todoListElement = document.createElement('div');
     this.todoListElement.id = this.id;
 
-    this.search = new SearchMember(this.todoListElement, this.id);
     // Add Event listener
     this.button.addEventListener('click', () => {
       if ((this.input !== null) && this.input?.value !== '') {
         this.addToDo.call(this, this.id);
         this.input!.value = '';
-        // console.log("niewe todo")
       }
     });
     this.deleteButton.addEventListener('click', () => {
-      // const deleteTodoListFirebase = async(id :string) => {
-      //   await deleteDoc(doc(db, "projects", id));
-      //   // console.log(id);
-      //   console.log(id);
-      // }
-      // deleteTodoListFirebase(this.id);
-      // // document.querySelector(`#${this.id}`)?.remove();
       deleteCardFromFirebase(this.id);
-      // deleteTodoListFirebase(this.id);
       console.log('deleteTodoListFirebase')
     });
 
     this.h2.addEventListener('click', (e : Event) => {
       e.preventDefault();
-      new Detailpage(this.id, (document.querySelector("#root")!));
-
+      new Detailpage(this.id, (document.querySelector(".detailContainer")!));
+      let detailContainer : HTMLDivElement = document.querySelector(".detailContainer")!;
+      detailContainer.innerHTML = ``;
     })
 
 
@@ -160,22 +148,18 @@ export default class TodoList {
         this.todoListElement.classList.add('todoList');
         this.todoListElement.append(this.todosDiv);
 
+        this.search = new SearchMember(this.todoListElement, this.id);
+
       }
     
 
   createTodos(): void {
     this.todosDiv = document.createElement('div');
     this.todosDiv.classList.add('todosDiv');
-    console.log(this.todos);
     this.todos.forEach(element => {
-      console.log(element["todo"]);
 
       const newCard = new Card((element["todo"]), (element["finished"]), this.todosDiv, this.id, uuidv4())
-      console.log(this.todosDiv)
-      // this.todoDiv = document.createElement('div');
-      // this.todoDiv.innerText = element;
-      // this.todoDiv.classList.add('todoDiv');
-      // this.todosDiv.append(this.todoDiv);
+ 
     });
   }
     

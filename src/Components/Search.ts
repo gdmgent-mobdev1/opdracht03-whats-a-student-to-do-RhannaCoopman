@@ -84,15 +84,10 @@ export default class SearchMember {
   getAllUsers() {
     const filterFunction = () => {
       const input = document.getElementById("myInput");
-      // console.log(input);
       const filter = input!.value.toUpperCase();
-      // console.log(filter);
       const div = document.getElementById("searchDiv");
       let a = div!.getElementsByTagName("a");
       for (let i = 0; i < a.length; i++) {
-        
-
-        // let valid = 0;
         let txtValue = a[i].textContent || a[i].innerText;
         if (txtValue.toUpperCase().indexOf(filter) > -1) {
           a[i].style.display = "";
