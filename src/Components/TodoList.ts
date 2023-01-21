@@ -165,6 +165,7 @@ export default class TodoList {
     
   createMembers(): void {
     this.allMembersDiv = document.createElement('div');
+    this.allMembersDiv.classList.add('AllMembersDiv');
     this.members.forEach(member => {
 
       // this.allMembersDiv.innerText = member.name;

@@ -2,7 +2,7 @@
   padding: 0;
   margin: 0;
 
-text-align: center;
+
 
   --boxshadow: 1px 3px 17px -4px var(--trans_brown);
 }
@@ -68,25 +68,59 @@ text-align: center;
   border: 1px solid var(--blue);
 }
 
+/* #root {
+  background-color: aqua;
+  width: 20vw;
+} */
+
+#root{
+  margin: 1em;
+  /*border: 1px solid grey;*/
+  display: flex;
+  width: 100vw;
+
+  flex-direction: column;
+  gap: 10px;
+}
+
 .detailContainer {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+
+  max-width: 100%;
 }
 
-.detailpage {
-  height: 100%;
-  width: 70vw;
-
-  z-index: 6;
-}
 .popuppage {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   z-index: 6;
+}
+
+button, input {
+  background-color: var(--beige_trans2);
+  color: var(--brown);
+  padding: 7px 10px;
+  border-radius: 5px;
+  box-shadow: var(--boxshadow);
+
+  border: none;
+}
+
+.acceptOrDelete {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  align-items: center;
+}
+
+h2 {
+  font-size: 8rem;
+  font-weight: bold;
+  /* color: red; */
 }
 /*
 body{
@@ -122,7 +156,7 @@ header {
     left: 0;
 
     height: 100vh;
-    width: 7rem;
+    width: 15rem;
     background-color: var(--trans_brown);
     
 
@@ -142,6 +176,8 @@ nav ul {
 
     min-height: 50%;
 
+    
+
     /* width: 70%; */
     /* background-color: aliceblue; */
 }
@@ -150,7 +186,7 @@ nav ul {
   nav {
     position: fixed;
     left: 0;
-    bottom: -50px;
+    bottom: 0;
     height: 3rem;
     width: 100vw;
   }
@@ -164,10 +200,28 @@ nav ul {
     width: 2rem;
     align-self: center;
   }
+
+  .inviteAndNew {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .inviteAndNew > div {
+    width: 100%;
+    flex-grow: 1;
+    flex-shrink: 1;
+  }
+
+  .todoList {
+    width: 90%;
+  }
 }
 
 nav ul li {
     list-style: none;
+    padding: 0.5rem;
+
+    flex-grow: 1;
 }
 
 nav ul li a {
@@ -204,21 +258,18 @@ nav ul li a {
 
 
 
-*{
-    padding: 0;
-    margin: 0;
-  }
+
   
   body{
-    /*background-color: rgb(30, 30, 95);*/
-    /* background-color: rgb(167, 167, 182);
-    font-family: "Open Sans", sans-serif; */
     background-color: var(--brown);
 
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
     background-size: cover;
+
+    text-align: center;
+    color: var(--brown)
   }
 
   main {
@@ -246,25 +297,19 @@ nav ul li a {
   }
   
   
-  #root{
-    margin: 1em;
-    /*border: 1px solid grey;*/
-    display: flex;
-    width: 100vw;
 
-    flex-direction: column;
-    gap: 10px;
-  }
   
   .projectContainer {
-    width: 100%-8rem;
+    /* max-width: 100vw; */
+
+    max-width: 90%;
 
     padding: 0.5rem;
     margin-left: 1rem;
 
     background-color: var(--beige_trans);
-
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
   }
@@ -283,19 +328,22 @@ nav ul li a {
     /* margin-right: 0; */
 
     background-color: var(--beige_trans);
+
+    flex-grow: 1;
+    flex-shrink: 1;
   }
 
   .projectsContainer{
 
-    width: 100vw;
-    min-height: 100vh;
+    width: 100%;
+    /* min-height: 100vh; */
 
     display: flex;
     flex-direction: column;
 
     /* margin-top: 5rem;
     margin-right: 3rem; */
-    margin: 5rem 3rem 0 7rem;
+    /* margin: 5rem 3rem 0 7rem; */
   }
 
   .todoList{
@@ -307,14 +355,14 @@ nav ul li a {
     padding: 0.7em;
     margin: 1em 0 1em 1em;
   
-    width: 25%;
+
     height: auto;
-    max-height: 15rem;
-    /* float: left; */
-    /* min-width: 300px; */
+
+    flex-grow: 1;
+    flex-shrink: 1;
 
     overflow: scroll;
-    /* height: 80vh; */
+
   }
   
   .todoList h2{
@@ -513,12 +561,18 @@ nav ul li a {
     display: flex;
   }
 
+  .AllMembersDiv {
+    display: flex;
+  }
   .memberDiv {
     padding: 5px 10px;
     margin: 2px;
     border-radius: 5px;
 
     width: 33%;
+
+    flex-grow: 1;
+    flex-shrink: 1;
   }
 
   .todoDiv {

@@ -24,6 +24,8 @@ export default class Card {
 
   p?: HTMLParagraphElement ;
 
+  div? : HTMLDivElement;
+
   menu?: HTMLDivElement ;
 
   menuTitle?: HTMLDivElement ;
@@ -69,14 +71,19 @@ export default class Card {
     this.card.setAttribute('draggable', 'true');
     this.card.id = this.id;
     this.card.addEventListener('click', (e) => {
-      if (e.target !== this.deleteButton) {
+      if (e.target !== this.deleteButton && e.target !== this.checkbox) {
         this.showMenu.call(this);
       }
     });
     this.card.addEventListener('dragstart', dragstartHandler);
 
+    this.div = document.createElement('div');
+    this.div.classList.add('acceptOrDelete')
+
     this.p = document.createElement('p');
     this.p.innerText = this.state.text;
+
+
 
     this.deleteButton = document.createElement('button');
     this.deleteButton.innerText = 'X';
@@ -98,8 +105,10 @@ export default class Card {
     } 
 
     this.card.append(this.p);
-    this.card.append(this.deleteButton);
-    this.card.append(this.checkbox);
+    this.card.append(this.div);
+
+    this.div.append(this.deleteButton);
+    this.div.append(this.checkbox);
 
     this.place.append(this.card);
   }
