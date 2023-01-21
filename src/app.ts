@@ -23,12 +23,15 @@ import Register from './Components/Register';
 
 import TodoList from './Components/TodoList' ;
 import Invite from './Components/invites' ;
+import ChangeTheme from './Components/ChangeTheme';
 
 new NewProject(document.querySelector("#newProjectContainer")!);
-new Invite(document.querySelector("#inviteContainer")!);
-new Login(document.querySelector("#root")!);
+new Invite(document.querySelector("#inviteContainer")!, "123");
 new Register(document.querySelector("#root")!);
+
+new Login(document.querySelector("#root")!);
 new PomodoroTimer(25, 5, document.querySelector(".projectsContainer")!);
+new ChangeTheme(document.querySelector("#theme")!)
 
 
 // const todo1 = new TodoList(document.querySelector("#projectContainer")!, "todolist");
@@ -67,19 +70,32 @@ new PomodoroTimer(25, 5, document.querySelector(".projectsContainer")!);
 
 // import { collection, query, where, onSnapshot } from "firebase/firestore";
 // , where("state", "==", "CA")
-const q = query(collection(db, "projects"));
-const unsubscribe = onSnapshot(q, (querySnapshot) => {
-  const projects : Object[] = [];
-  let projectContainer : HTMLDivElement = document.querySelector("#projectContainer")!;
-  projectContainer.innerHTML = ``;
-  querySnapshot.forEach((doc) => {
-      projects.push(doc.data());
-      // console.log(doc.data().todos);
-      doc.data().todos.forEach(element => {
-        console.log(element);
-      });
-      new TodoList(projectContainer, doc.data().name, doc.data().description, doc.data().taskMembers, doc.data().todos, doc.data().projectId);
+export const renderTodos = () => {
+  let user_id = sessionStorage.getItem('user_id');
+  console.log(user_id);
+  const q = query(collection(db, "projects"), where("members", "array-contains", user_id));
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const projects : Object[] = [];
+    
+    let projectContainer : HTMLDivElement = document.querySelector("#projectContainer")!;
+    projectContainer.innerHTML = ``;
+    querySnapshot.forEach((doc) => {
+        projects.push(doc.data());
+        console.log(projects);
+        // console.log(doc.data().todos);
+        // doc.data().todos.forEach(element => {
+        //   // console.log(element);
+        // });
+        new TodoList(projectContainer, doc.data().name, doc.data().description, doc.data().taskMembers, doc.data().todos, doc.data().projectId);
+    });
+    // console.log("Current projects: " + projects);
   });
-  console.log("Current projects: " + projects);
-});
+}
+
+renderTodos();
+
+
+
+
+
 

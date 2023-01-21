@@ -12,6 +12,7 @@ import {
   serverTimestamp,
   updateDoc,
   arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
 
 import { getAuth } from "firebase/auth";
@@ -46,7 +47,7 @@ const db = getFirestore();
 
 export {auth, db};
 
-
+let user_id = sessionStorage.getItem('user_id')
 // // get data from firestore
 // export const fireStoreDb = getFirestore(fireStoreApp);
 // export const addTodoFirebase = async(text: string, todoId: string) => {
@@ -92,27 +93,58 @@ export const updateTodoFirebase = async(todoListId: string, id: string, attribut
 //   console.log('deleteTodoListFirebase');
 // }
 
-export const deleteTodoListFirebase = () => {
-  console.log('without async');
-}
-
-
-// export const deleteTodoListFirebase = async() => {
-//   console.log("test");
-//   const cardsSnapShot = doc(db, "projects", "8IHv6Rm6OEGThDdt2fq0");
-  
-//   const docRef = await updateDoc(cardsSnapShot, {
-//     todos: arrayUnion({    
-//       title: text,
-//       description: '',
-//       comments: []})
-//     }
-//   );
-//   // return docRef.id;
+// export const deleteTodoListFirebase = () => {
+//   console.log('without async');
+//   await deleteDoc(doc(db, "projects", id));
 // }
 
-export const deleteCardFromFirebase = async(todoListId: string, id: string) => {
+
+export const deleteTodoListFirebase = async(id : string, todo: string) => {
+  console.log("test");
+  const cardsSnapShot = doc(db, "projects", id);
+  
+  const docRef = await updateDoc(cardsSnapShot, {
+    todos: arrayRemove({
+      finished: false,
+      finishedBy: "",
+      todo: todo
+    })
+    }
+  );
+  console.log("succes");
+
+}
+
+export const CheckTodo = async(id : string, todo: string) => {
+  console.log("check");
+  const cardsSnapShot = doc(db, "projects", id);
+
+  const falseRef = await updateDoc(cardsSnapShot, {
+    todos: arrayRemove({
+      finished: false,
+      finishedBy: "",
+      todo: todo
+    })
+    }
+  );
+  const trueRef = await updateDoc(cardsSnapShot, {
+    todos: arrayUnion({
+      finished: true,
+      finishedBy: user_id,
+      todo: todo
+    })
+    }
+  );
+  console.log("check succes");
+
+}
+
+export const deleteCardFromFirebase = async(id: string) => {
   await deleteDoc(doc(db, "projects", id));
 }
+
+// export const deleteTodoFromFirebase = async(id: string) => {
+//   await deleteDoc(doc(db, "projects", id));
+// }
 
 

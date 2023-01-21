@@ -16,16 +16,20 @@ export default class PomodoroTimer {
   workTimeLabel?: HTMLLabelElement;
   pauseTimeDiv?: HTMLDivElement;
   pauseTimeLabel?: HTMLLabelElement;
+  // pauseDuration? : string;
   buttonsDiv?: HTMLDivElement;
+  feedbackDiv? : HTMLDivElement;
+  feedback? : string;
   timeLeftDiv?: HTMLDivElement;
-  minutesLeft: string | number;
+  // minutesLeft?: number;
 
 
-  constructor(workTime: number = 25, pauseTime: number = 5, place : HTMLDivElement) {
-    this.workTime = workTime;
-    this.pauseTime = pauseTime;
+  constructor(workTime: number, pauseTime: number, place : HTMLDivElement) {
+    this.workTime = workTime * 60;
+    this.pauseTime = pauseTime * 60;
     this.place = place;
     this.timeLeft = this.workTime;
+    this.feedback = "Set a timer";
     this.isPaused = true;
     this.render();
   }
@@ -41,7 +45,7 @@ export default class PomodoroTimer {
     this.workTimeInput = document.createElement('input');
     this.workTimeInput.id = 'work-time-input';
     this.workTimeInput.type = 'number';
-    this.workTimeInput.value = this.workTime;
+    this.workTimeInput.value = this.workTime/60;
     this.workTimeDiv.appendChild(this.workTimeLabel);
     this.workTimeDiv.appendChild(this.workTimeInput);
 
@@ -51,7 +55,7 @@ export default class PomodoroTimer {
     this.pauseTimeInput = document.createElement('input');
     this.pauseTimeInput.id = 'pause-time-input';
     this.pauseTimeInput.type = 'number';
-    this.pauseTimeInput.value = this.pauseTime;
+    this.pauseTimeInput.value = this.pauseTime/60;
     this.pauseTimeDiv.appendChild(this.pauseTimeLabel);
     this.pauseTimeDiv.appendChild(this.pauseTimeInput);
 
@@ -79,14 +83,18 @@ export default class PomodoroTimer {
     // create time left element
     this.timeLeftDiv = document.createElement('div');
     this.timeLeftDiv.id = 'time-left';
-    this.minutesLeft = this.timeLeft / 60;
-    this.timeLeftDiv.innerText = `${this.minutesLeft} seconds left`;
+    // this.minutesLeft = this.timeLeft/60;
+    this.timeLeftDiv.innerText = `${Math.floor(this.timeLeft/60)} minutes left`;
 
+    //create feedbackDiv (Time strted, finished, break, work)
+    this.feedbackDiv = document.createElement('div');
+    this.feedbackDiv.innerText = "Choose your work and breaktime and press start to start the timer!";
     // append elements to main div
     this.div.appendChild(this.workTimeDiv);
     this.div.appendChild(this.pauseTimeDiv);
     this.div.appendChild(this.buttonsDiv);
     this.div.appendChild(this.timeLeftDiv);
+    this.div.appendChild(this.feedbackDiv);
 
     // // add event listeners
     this.workTimeInput.addEventListener("change", (e) => {
@@ -94,9 +102,12 @@ export default class PomodoroTimer {
       console.log(this.workTime);
       // console.log(this.timeLeft * 60);
     });
-    // this.pauseTimeInput.addEventListener("change", (e) => {
-    //   this.pauseTime(e.target.value);
-    // });
+    this.pauseTimeInput.addEventListener("change", (e) => {
+      this.pauseTime = this.pauseTimeInput!.value * 60;
+      console.log(this.pauseTime);
+
+    });
+
     this.startButton.addEventListener("click", () => {
       this.start();
     });
@@ -119,10 +130,29 @@ export default class PomodoroTimer {
     this.intervalId = setInterval(() => {
       if (!this.isPaused) {
         this.timeLeft--;
-        this.timeLeftDiv!.innerHTML = `${this.timeLeft} seconds left`;
+        this.timeLeftDiv!.innerHTML = `${Math.floor(this.timeLeft/60)} minutes and ${this.timeLeft%60} seconds left on worktime!`;
+        this.feedbackDiv!.innerHTML = `You can do this!`;
+
+        if (this.timeLeft === 0) {
+          clearInterval(this.intervalId);
+          this.startPause();
+        }
+      }
+    }, 1000);
+  }
+
+  startPause() {
+    this.timeLeft = this.pauseTime;
+    this.intervalId = setInterval(() => {
+      if (!this.isPaused) {
+        this.timeLeft--;
+        this.timeLeftDiv!.innerHTML = `${Math.floor(this.timeLeft/60)} minutes and ${this.timeLeft%60} seconds left on breaktime!`;
+        this.feedbackDiv!.innerHTML = `Time for a break!`;
+
         if (this.timeLeft === 0) {
           this.stop();
-          console.log('Work time ended, take a break!');
+          this.feedbackDiv!.innerHTML = `Set a new timer to get back to work!`;
+
         }
       }
     }, 1000);
@@ -137,17 +167,23 @@ export default class PomodoroTimer {
     this.pauseButton!.setAttribute("disabled", "true");
     this.resumeButton!.setAttribute("disabled", "true");
     this.stopButton!.setAttribute("disabled", "true");
+    this.feedbackDiv!.innerHTML = `You stopped the timer, set a new timer to get back to work!`;
+
   }
 
   pause() {
     this.isPaused = true;
     this.pauseButton!.setAttribute("disabled", "true");
     this.resumeButton!.removeAttribute("disabled");
+    this.feedbackDiv!.innerHTML = `Press resume to continue!`;
+
   }
 
   resume() {
     this.isPaused = false;
     this.pauseButton!.removeAttribute("disabled");
     this.resumeButton!.setAttribute("disabled", "true");
+    this.feedbackDiv!.innerHTML = `Keep going!`;
+
   }
 }

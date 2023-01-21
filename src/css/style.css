@@ -2,13 +2,18 @@
   padding: 0;
   margin: 0;
 
+
+
+  --boxshadow: 1px 3px 17px -4px var(--trans_brown);
+}
+.darktheme {
   --primary-color: rgb(9, 8, 28);
   --secudairy-color: orange;
   --tertiaty-color: orange;
 
-  --green: rgb(38, 51, 22);
-  --red: rgb(104, 19, 28);
-  --orange: rgb(109, 80, 31);
+  --green: #0E3523;
+  --red: #47211C;
+  --orange: #7E4F34;
   --trans_brown: rgba(34, 25, 9, 0.541);
   --brown: rgb(34, 25, 9);
   --beige: rgb(182, 174, 159);
@@ -16,10 +21,29 @@
   --beige_trans2: rgba(221, 215, 204, 0.466);
   --yellow: rgb(167, 167, 39);
 
-
   --blue: rgb(36, 36, 71);
 
-  --boxshadow: 1px 3px 17px -4px var(--trans_brown);
+  background-image: url("/src/images/daria-kraplak-d34DtRp1bqo-unsplash.jpg");
+}
+
+.lighttheme {
+  --primary-color: rgb(9, 8, 28);
+  --secudairy-color: orange;
+  --tertiaty-color: orange;
+
+  --green: #6b815f;
+  --red: #b34040;
+  --orange: #a85d32;
+  --trans_brown: rgba(136, 131, 122, 0.541);
+  --brown: rgb(202, 186, 157);
+  --beige: rgb(231, 228, 220);
+  --beige_trans: rgba(211, 207, 197, 0.575);
+  --beige_trans2: rgba(221, 215, 204, 0.726);
+  --yellow: rgb(223, 223, 146);
+
+  --blue: #636681;
+
+  background-image: url("/src/images/florian-klauer-mk7D-4UCfmg-unsplash.jpg");
 }
 
 .blue {
@@ -27,7 +51,7 @@
 }
 
 .green {
-    background-color: var(--green);
+    background-color: var(--green) !important;
 }
 .red {
     background-color: var(--red);
@@ -134,7 +158,8 @@ nav ul li a {
     color: var(--beige);
 }
 
-.loginContainer {
+.loginContainer,
+.registerContainer {
   height: 100vh;
   width: 100vw;
 
@@ -357,7 +382,7 @@ button, .status{
     /* background-color: rgb(167, 167, 182);
     font-family: "Open Sans", sans-serif; */
     background-color: var(--brown);
-    background-image: url("/src/images/daria-kraplak-d34DtRp1bqo-unsplash.jpg");
+
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;

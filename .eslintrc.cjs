@@ -7,7 +7,7 @@ module.exports = {
   overrides: [
   ],
   parserOptions: {
-    project: './tsconfig.json'
+    project: './tsconfig.json',
   },
   rules: {
     'linebreak-style': 0,

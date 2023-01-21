@@ -55,6 +55,9 @@ export default class Register {
 
           // Empty form
           // registerContainer.reset();
+          let user_id = cred.user.uid;
+          sessionStorage.setItem("user_id", user_id);
+
 
           // Console log users information
           console.log('user created:', cred.user.uid);

@@ -1,21 +1,6 @@
 /* eslint-disable import/no-cycle */
-import {
-  v4 as uuidv4
-} from 'uuid';
-import {
-  root,
-  State
-} from '../Lib';
-import {
-  dragstartHandler
-} from '../Lib/dragAndDrop';
-import {
-  deleteCardFromFirebase
-} from '../lib/firebase-init';
-import Comment from './Comment';
-import editableText from './editableText';
-import TodoList from './TodoList';
-import { collection, getDocs, updateDoc, doc, arrayUnion, getDoc } from "firebase/firestore";
+
+import { collection, getDocs, updateDoc, doc, arrayUnion } from "firebase/firestore";
 
 import {
   db
@@ -58,10 +43,13 @@ export default class SearchMember {
 
   place: HTMLElement;
 
-  div ?: HTMLFormElement;
+  id:string;
 
-  constructor(place: HTMLElement) {
+  div !: HTMLFormElement;
+
+  constructor(place: HTMLElement, id : string) {
     this.place = place;
+    this.id = id;
 
     this.getAllUsers();
   }
@@ -97,10 +85,10 @@ export default class SearchMember {
     const filterFunction = () => {
       const input = document.getElementById("myInput");
       // console.log(input);
-      const filter = input.value.toUpperCase();
+      const filter = input!.value.toUpperCase();
       // console.log(filter);
       const div = document.getElementById("searchDiv");
-      let a = div.getElementsByTagName("a");
+      let a = div!.getElementsByTagName("a");
       for (let i = 0; i < a.length; i++) {
         
 

@@ -1,25 +1,8 @@
-/* eslint-disable import/no-cycle */
-import {
-  v4 as uuidv4
-} from 'uuid';
-import {
-  root,
-  State
-} from '../Lib';
-import {
-  dragstartHandler
-} from '../Lib/dragAndDrop';
-import {
-  deleteCardFromFirebase
-} from '../lib/firebase-init';
-import Comment from './Comment';
-import editableText from './editableText';
-import TodoList from './TodoList';
+
 import SearchMember from './Search';
 
 
 import {
-  onSnapshot,
   collection,
   query,
   where,
@@ -29,45 +12,47 @@ import {
   arrayUnion,
   arrayRemove,
   Query,
-  getDoc,
 } from 'firebase/firestore';
 import {
   db
 } from '../Lib/firebase-init';
 
 export default class Invite {
-  nameElement: HTMLHeadingElement;
+  nameElement?: HTMLHeadingElement;
 
-  name: string;
+  name?: string;
 
-  descriptionElement: HTMLParagraphElement;
+  descriptionElement?: HTMLParagraphElement;
 
-  description: string;
+  description?: string;
 
-  dueDateElement: HTMLParagraphElement;
+  dueDateElement?: HTMLParagraphElement;
 
-  dueDate: string;
+  dueDate?: string;
 
-  allMembersDiv: HTMLDivElement;
+  allMembersDiv?: HTMLDivElement;
 
-  memberDiv: HTMLDivElement;
+  memberDiv?: HTMLDivElement;
 
-  member: string;
+  member?: string;
 
-  noInvite : string;
+  noInvite? : string;
 
-  noInviteElement: HTMLHeadingElement;
+  noInviteElement?: HTMLHeadingElement;
 
-  acceptButton: HTMLInputElement;
+  acceptButton?: HTMLInputElement;
 
   card ? : HTMLDivElement;
 
   place: HTMLElement;
 
-  search : SearchMember;
+  search? : SearchMember;
 
-  constructor(place: HTMLElement) {
+  id: string;
+
+  constructor(place: HTMLElement, id :string) {
     this.place = place;
+    this.id = id
 
     this.myInvites();
   }
@@ -105,7 +90,7 @@ export default class Invite {
       let user_id = sessionStorage.getItem("user_id");
     }
 
-
+    console.log(id);
 
     // create card-element
     this.card = document.createElement('div');
@@ -131,21 +116,8 @@ export default class Invite {
     this.card.append(this.acceptButton);
 
     this.acceptButton.addEventListener('click', () => {
-      console.log('succes');
-      async function FromInvitedToProjects() {  
-        let user_id = sessionStorage.getItem("user_id");
-
-        const projectRef = await doc(db, "projects", id);
-        // const docSnap = await getDoc(projectRef);
-
-        updateDoc(projectRef, {
-          invitedMembers: arrayRemove(user_id),
-          members: arrayUnion(user_id),
-
-          taskMembers: arrayUnion({id: user_id, status: "Not started", name: "memberName"}),
-        });
-    }
-    FromInvitedToProjects();
+      this.FromInvitedToProjects(id);
+      this.test();
     })
 
     //name
@@ -181,6 +153,7 @@ export default class Invite {
     //members
     for (const key in projectMembers) {
       let memberInfo : Object = projectMembers[key];
+      console.log(memberInfo);
 
       let memberId : string = memberInfo.id;
       let memberName : string = memberInfo.name;
@@ -235,5 +208,26 @@ export default class Invite {
       // this.NewMemberForm.append(this.NewMemberInput);
       // this.NewMemberForm.append(this.NewMemberButton);
       // this.allMembersDiv.append(this.NewMemberForm);
+  }
+
+  FromInvitedToProjects (id:string): void {  
+    let user_id = sessionStorage.getItem("user_id");
+    // let user_id = "2IkjWgdS5WaweCmeu6hrO0KsaDy2";
+    console.log(id);
+
+    const projectRef = doc(db, "projects", id);
+    console.log(projectRef);
+    // const docSnap = await getDoc(projectRef);
+
+    updateDoc(projectRef, {
+      invitedMembers: arrayRemove(user_id),
+      members: arrayUnion(user_id),
+
+      taskMembers: arrayUnion({id: user_id, status: "Not started", name: "memberName"}),
+    });
+    console.log('test accepted2');
+}
+  test () {
+    console.log('test accepted');
   }
 }

@@ -5,23 +5,17 @@ import { dragoverHandler, dropHandler } from '../Lib/dragAndDrop';
 import Card from './Card';
 import SearchMember from './Search';
 import {TaskMember} from '../Lib/todoInterface';
-import { initializeApp } from "firebase/app";
-import {deleteTodoListFirebase} from "../Lib/firebase-init";
+// import {deleteTodoListFirebase} from "../Lib/firebase-init";
+import {deleteCardFromFirebase} from "../Lib/firebase-init";
+
 import Detailpage from './Detailpage';
 
 
 import { 
-  getFirestore, 
   doc, 
-  deleteDoc, 
-  collection,
-  addDoc,
-  setDoc,
-  serverTimestamp,
   updateDoc,
   arrayUnion,
 } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
 import {
   db
 } from '../Lib/auth';
@@ -39,11 +33,11 @@ export default class TodoList {
 
   todos: Array<object>;
 
-  todosDiv?: HTMLDivElement;
+  todosDiv!: HTMLDivElement;
 
   input?: HTMLInputElement ;
 
-  allMembersDiv?: HTMLDivElement;
+  allMembersDiv!: HTMLDivElement;
 
   memberDiv?: HTMLDivElement;
 
@@ -63,9 +57,10 @@ export default class TodoList {
 
   deleteButton?: HTMLButtonElement;
 
-  todoListElement?: string | HTMLElement ;
+  todoListElement?: HTMLElement ;
 
   id: string;
+
   constructor(place: HTMLElement, title = 'to-do list', description = 'add description', members : Array<TaskMember>, todos : Array<object>, id = '_'+uuidv4()) {
     this.id = id;
     this.place = place;
@@ -78,18 +73,16 @@ export default class TodoList {
   }
 
   async addToDo(id: string) {
-    console.log(1);
     if (this.input instanceof HTMLInputElement && this.div instanceof HTMLDivElement) {
-      console.log(2);
       const text = this.input.value;
       const cardId = "todo" + id;
-      const newCard = new Card(text, this.div, this.id, cardId)
+      const newCard = new Card(text, false, this.div, this.id, cardId)
       this.cardArray.push(newCard); 
       console.log(3);
       const projectRef = doc(db, "projects", id);
 
       await updateDoc(projectRef, {
-        todos: arrayUnion(text)
+        todos: arrayUnion({todo: text, finished: false, finishedBy: ""})
     });
     }
   }
@@ -126,7 +119,7 @@ export default class TodoList {
     this.todoListElement = document.createElement('div');
     this.todoListElement.id = this.id;
 
-    this.search = new SearchMember(this.todoListElement);
+    this.search = new SearchMember(this.todoListElement, this.id);
     // Add Event listener
     this.button.addEventListener('click', () => {
       if ((this.input !== null) && this.input?.value !== '') {
@@ -143,13 +136,14 @@ export default class TodoList {
       // }
       // deleteTodoListFirebase(this.id);
       // // document.querySelector(`#${this.id}`)?.remove();
-      deleteTodoListFirebase();
+      deleteCardFromFirebase(this.id);
+      // deleteTodoListFirebase(this.id);
       console.log('deleteTodoListFirebase')
     });
 
-    this.todoListElement.addEventListener('click', (e : Event) => {
+    this.h2.addEventListener('click', (e : Event) => {
       e.preventDefault();
-      new Detailpage(this.id);
+      new Detailpage(this.id, (document.querySelector("#root")!));
 
     })
 
@@ -172,10 +166,12 @@ export default class TodoList {
   createTodos(): void {
     this.todosDiv = document.createElement('div');
     this.todosDiv.classList.add('todosDiv');
-
+    console.log(this.todos);
     this.todos.forEach(element => {
-      console.log(element);
-      const newCard = new Card(element, this.todosDiv, this.id, uuidv4())
+      console.log(element["todo"]);
+
+      const newCard = new Card((element["todo"]), (element["finished"]), this.todosDiv, this.id, uuidv4())
+      console.log(this.todosDiv)
       // this.todoDiv = document.createElement('div');
       // this.todoDiv.innerText = element;
       // this.todoDiv.classList.add('todoDiv');
@@ -188,9 +184,9 @@ export default class TodoList {
     this.members.forEach(member => {
 
       // this.allMembersDiv.innerText = member.name;
-      let memberName = member.name;
-      let memberStatus = member.status;
-      let memberId = member.id;
+      let memberName:string = member.name;
+      let memberStatus:string = member.status;
+      let memberId:string = member.id;
       
         this.memberDiv = document.createElement('div');
         this.memberDiv.classList.add("memberDiv");

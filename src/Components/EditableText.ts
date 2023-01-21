@@ -1,4 +1,3 @@
-import { Property } from '../Lib';
 import { updateTodoFirebase } from '../lib/firebase-init';
 // eslint-disable-next-line import/no-cycle
 import Card from './Card';
@@ -20,7 +19,7 @@ export default class EditableText {
 
   saveButton?: HTMLButtonElement ;
 
-  property: Property;
+  property: string;
 
   id: string;
   parentId: string
@@ -28,7 +27,7 @@ export default class EditableText {
     text: string,
     place: HTMLElement,
     card: Card,
-    property:Property,
+    property: string,
     typeOfInput: string,
     id: string, 
     parentId: string

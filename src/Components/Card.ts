@@ -1,17 +1,18 @@
 /* eslint-disable import/no-cycle */
-import { updateCurrentUser } from 'firebase/auth';
-import { v4 as uuidv4 } from 'uuid';
-import { root, State } from '../Lib';
+import { State } from '../Lib';
 import { dragstartHandler } from '../Lib/dragAndDrop';
 // import { updateTodoFirebase } from '../Lib/firebase-init';
 import Comment from './Comment';
 import EditableText from './EditableText';
 import TodoList from './TodoList';
+import {deleteTodoListFirebase} from "../Lib/firebase-init";
+import {CheckTodo} from "../Lib/firebase-init";
+
 
 export default class Card {
   place: HTMLElement;
 
-  todoList: TodoList;
+  todoList ?: TodoList;
 
   state: State;
 
@@ -35,15 +36,23 @@ export default class Card {
 
   menuComments?: HTMLDivElement ;
 
+  checkbox?: HTMLInputElement
+
   editableDescription?: EditableText ;
 
   editableTitle?: EditableText;
 
+  parentId: string;
+
+  finished: boolean;
+
   id: string;
 
-  constructor(text: string, place: HTMLElement, id: string, cardId: string) {
+  constructor(text: string, finished: boolean, place: HTMLElement, id: string, cardId: string) {
     this.id = cardId;
+    this.parentId = id;
     this.place = place;
+    this.finished = finished;
 
     // this.todoList = todoList;
     this.state = {
@@ -75,19 +84,30 @@ export default class Card {
       this.deleteCard.call(this);
     });
 
+
+    this.checkbox = document.createElement('input');
+    this.checkbox.setAttribute('type', 'checkbox');
+    this.checkbox.addEventListener('change', () => {
+      console.log('check clicked')
+      CheckTodo(this.parentId, this.state.text);
+    });
+
     this.card.append(this.p);
     this.card.append(this.deleteButton);
+    this.card.append(this.checkbox);
 
     this.place.append(this.card);
   }
 
   deleteCard(): void {
     this.card?.remove();
-    const i = this.todoList.cardArray.indexOf(this);
-    console.log(i);
-    // this.todoList.cardArray.splice(i, 1);
+    // const i = this.todoList!.cardArray.indexOf(this);
+    // console.log(i);
+    // this.todoList!.cardArray.splice(i, 1);
+    console.log(this.state.text)
+    deleteTodoListFirebase(this.parentId, this.state.text);
   }
-
+  
   showMenu(): void {
     // Create elements
     this.menu = document.createElement('div');
@@ -135,8 +155,8 @@ export default class Card {
     this.menuContainer.append(this.menu);
     (document.querySelector(".projectsContainer")!).append(this.menuContainer);
 
-    this.editableDescription = new EditableText(this.state.description, this.menuDescription, this, 'description', 'textarea');
-    this.editableTitle = new EditableText(this.state.text, this.menuTitle, this, 'text', 'input');
+    this.editableDescription = new EditableText(this.state.description, this.menuDescription, this, "description", 'textarea', "123", this.id);
+    this.editableTitle = new EditableText(this.state.text, this.menuTitle, this, 'text', 'input', "234", this.id);
 
     this.renderComments();
   }

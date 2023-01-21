@@ -142,9 +142,11 @@ const setProject = async () => {
         status: "Not started"
       }]
     ,
-    todos: [
-      "Maak je eerste todo!"
-    ],
+    todos: [{
+      finished: false,
+      finishedBy: "",
+      todo: "Maak je eerste todo!"
+    }]
   });
 
 

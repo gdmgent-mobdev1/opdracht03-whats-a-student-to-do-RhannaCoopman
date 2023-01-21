@@ -1,149 +1,149 @@
-import { v4 as uuidv4 } from 'uuid';
-import { root, State } from '../Lib';
-import { dragstartHandler } from '../Lib/dragAndDrop';
-import { deleteCardFromFirebase } from '../lib/firebase-init';
-import Comment from './Comment';
-import editableText from './editableText';
-import TodoList from './TodoList';
-import {
-  onSnapshot,
-  collection,
-  query, 
-  where,
-  doc, 
-  getDocs,
-  updateDoc,
-  arrayUnion,
-  Query
-} from 'firebase/firestore';
-import {
-  db, 
-  auth
-} from '../Lib/firebase-init';
+// import { v4 as uuidv4 } from 'uuid';
+// import { root, State } from '../Lib';
+// import { dragstartHandler } from '../Lib/dragAndDrop';
+// import { deleteCardFromFirebase } from '../lib/firebase-init';
+// import Comment from './Comment';
+// import editableText from './editableText';
+// import TodoList from './TodoList';
+// import {
+//   onSnapshot,
+//   collection,
+//   query, 
+//   where,
+//   doc, 
+//   getDocs,
+//   updateDoc,
+//   arrayUnion,
+//   Query
+// } from 'firebase/firestore';
+// import {
+//   db, 
+//   auth
+// } from '../Lib/firebase-init';
 
-export default class Card {
-  place: HTMLElement;
+// export default class Card {
+//   place: HTMLElement;
 
-  // todoList: TodoList;
+//   // todoList: TodoList;
 
-  // state: State;
+//   // state: State;
 
-  // menuContainer?: HTMLElement;
+//   // menuContainer?: HTMLElement;
 
-  // card?: HTMLDivElement ;
+//   // card?: HTMLDivElement ;
 
-  // deleteButton?: HTMLButtonElement ;
+//   // deleteButton?: HTMLButtonElement ;
 
-  // p?: HTMLParagraphElement ;
+//   // p?: HTMLParagraphElement ;
 
-  // menu?: HTMLDivElement ;
+//   // menu?: HTMLDivElement ;
 
-  // menuTitle?: HTMLDivElement ;
+//   // menuTitle?: HTMLDivElement ;
 
-  // menuDescription?: HTMLDivElement ;
+//   // menuDescription?: HTMLDivElement ;
 
-  // commentsInput?: HTMLInputElement ;
+//   // commentsInput?: HTMLInputElement ;
 
-  // commentsButton?: HTMLButtonElement ;
+//   // commentsButton?: HTMLButtonElement ;
 
-  // menuComments?: HTMLDivElement ;
+//   // menuComments?: HTMLDivElement ;
 
-  // editableDescription?: editableText ;
+//   // editableDescription?: editableText ;
 
-  // editableText?: editableText;
+//   // editableText?: editableText;
 
-  // id: string;
+//   // id: string;
 
-  // parentId: string;
+//   // parentId: string;
 
-  title: string;
+//   title: string;
 
-  // constructor(title: string, place: HTMLElement, todoList: TodoList, id = '_'+uuidv4(), parentId:string) {
-  //   this.id = id;
-  //   this.place = place;
-  //   this.todoList = todoList;
-  //   this.state = {
-  //     id,
-  //     title,
-  //     description: 'Click to write a description...',
-  //     comments: [],
-  //   };
-  //   this.parentId = parentId;
+//   // constructor(title: string, place: HTMLElement, todoList: TodoList, id = '_'+uuidv4(), parentId:string) {
+//   //   this.id = id;
+//   //   this.place = place;
+//   //   this.todoList = todoList;
+//   //   this.state = {
+//   //     id,
+//   //     title,
+//   //     description: 'Click to write a description...',
+//   //     comments: [],
+//   //   };
+//   //   this.parentId = parentId;
 
-  //   this.render();
+//   //   this.render();
 
-  // }
+//   // }
 
-  constructor(title: string, place: HTMLElement){
-    this.title = title;
-    this.place = place;
+//   constructor(title: string, place: HTMLElement){
+//     this.title = title;
+//     this.place = place;
 
-    this.render();
-  }
+//     this.render();
+//   }
 
-  // Functions
-  // Render (make the thing)
-  render(): void {
-    const q : Query = query(collection(db, "projects"), where("members", "array-contains", "234"));
+//   // Functions
+//   // Render (make the thing)
+//   render(): void {
+//     const q : Query = query(collection(db, "projects"), where("members", "array-contains", "234"));
 
-    const querySnapshot = getDocs(q);
+//     const querySnapshot = getDocs(q);
 
-    querySnapshot.then((snapshot) => {
-      snapshot.forEach((docc) => {
-        let project = docc.data();
-        console.log(project);
+//     querySnapshot.then((snapshot) => {
+//       snapshot.forEach((docc) => {
+//         let project = docc.data();
+//         console.log(project);
 
-        const cardContainer = document.createElement('div');
-        cardContainer.classList.add('project');
+//         const cardContainer = document.createElement('div');
+//         cardContainer.classList.add('project');
 
-        let projectName = project.name;
-        let projectDescription = project.description;
-        let projectDueDate = project.dueDate;
+//         let projectName = project.name;
+//         let projectDescription = project.description;
+//         let projectDueDate = project.dueDate;
 
-        for (const key in project.taskMembers) {
-          let memberInfo = project.taskMembers[key];
+//         for (const key in project.taskMembers) {
+//           let memberInfo = project.taskMembers[key];
 
-          let memberId = memberInfo.name;
-          let memberName = memberInfo.name;
+//           let memberId = memberInfo.name;
+//           let memberName = memberInfo.name;
 
 
-          cardContainer.setAttribute('id', project.id);
+//           cardContainer.setAttribute('id', project.id);
 
-          cardContainer.innerHTML = `
-          <h4>${project.name}</h4>
-          <p>${project.description}</p>
-          <div class="flex"><p>${project.dueDate}</p><p>Tasks: 50</p><p>Publicationdate : ${project.publicationDate}</p></div>
-          <div class="flex">
-            <div class="blue status" value="${memberInfo.status}">
-            ${memberInfo.name}
-            </div>
-          </div>
+//           cardContainer.innerHTML = `
+//           <h4>${project.name}</h4>
+//           <p>${project.description}</p>
+//           <div class="flex"><p>${project.dueDate}</p><p>Tasks: 50</p><p>Publicationdate : ${project.publicationDate}</p></div>
+//           <div class="flex">
+//             <div class="blue status" value="${memberInfo.status}">
+//             ${memberInfo.name}
+//             </div>
+//           </div>
   
-          <form>
-            <input type="text" value="v5S4hoR9UwS8tK08nvpUs94Illq1" required name="user_id">
-            <button type="submit">Submit</button>
-          </form>
-          `;
+//           <form>
+//             <input type="text" value="v5S4hoR9UwS8tK08nvpUs94Illq1" required name="user_id">
+//             <button type="submit">Submit</button>
+//           </form>
+//           `;
 
           
-        }
+//         }
 
-        this.place.append(cardContainer);
+//         this.place.append(cardContainer);
 
-        cardContainer.addEventListener('submit', (e : Event) => {
-          e.preventDefault();
-          const formdata = new FormData(e.target);
-          const user_id = formdata.get('user_id');
-          const projectRef = doc(db, "projects", project.id);
+//         cardContainer.addEventListener('submit', (e : Event) => {
+//           e.preventDefault();
+//           const formdata = new FormData(e.target);
+//           const user_id = formdata.get('user_id');
+//           const projectRef = doc(db, "projects", project.id);
 
 
-          updateDoc(projectRef, {
-            members: arrayUnion(user_id)
-          });
-        })
+//           updateDoc(projectRef, {
+//             members: arrayUnion(user_id)
+//           });
+//         })
 
-        return cardContainer;
-      })
-    })
-  }
-}
+//         return cardContainer;
+//       })
+//     })
+//   }
+// }
